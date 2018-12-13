@@ -511,7 +511,8 @@ export default class GooglePlacesAutocomplete extends Component {
       }
 
       const query = Qs.stringify(this.props.query);
-      console.log(`_request (autocomplete): ${text}: ${query}`);
+      const redactedKey = this.props.query.key ? 'redacted' : 'not-specified';
+      console.log(`_request (autocomplete): ${text}: ${JSON.stringify({...this.props.query, key: redactedKey})}`);
       request.open('GET', `https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=${encodeURIComponent(text)}&${query}`);
 
       if (this.props.query.origin !== null) {
