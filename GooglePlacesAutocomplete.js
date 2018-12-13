@@ -279,11 +279,15 @@ export default class GooglePlacesAutocomplete extends Component {
         }
       };
 
-      request.open('GET', 'https://maps.googleapis.com/maps/api/place/details/json?' + Qs.stringify({
+      const queryParams = Qs.stringify({
         key: this.props.query.key,
         placeid: rowData.place_id,
         language: this.props.query.language,
-      }));
+      });
+
+      console.log(`_request (details): ${rowData.place_id}`);
+
+      request.open('GET', `https://maps.googleapis.com/maps/api/place/details/json?${queryParams}`);
 
       if (this.props.query.origin !== null) {
         request.setRequestHeader('Referer', this.props.query.origin)
@@ -425,17 +429,25 @@ export default class GooglePlacesAutocomplete extends Component {
       let url = '';
       if (this.props.nearbyPlacesAPI === 'GoogleReverseGeocoding') {
         // your key must be allowed to use Google Maps Geocoding API
-        url = 'https://maps.googleapis.com/maps/api/geocode/json?' + Qs.stringify({
+        const queryParams = Qs.stringify({
           latlng: latitude + ',' + longitude,
           key: this.props.query.key,
           ...this.props.GoogleReverseGeocodingQuery,
         });
+
+        url = `https://maps.googleapis.com/maps/api/geocode/json?${queryParams}`;
+
+        console.log(`_request (geocode): ${queryParams}`);
       } else {
-        url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?' + Qs.stringify({
+        const queryParams = Qs.stringify({
           location: latitude + ',' + longitude,
           key: this.props.query.key,
           ...this.props.GooglePlacesSearchQuery,
         });
+
+        url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?${queryParams}`;
+
+        console.log(`_request (nearbysearch): ${queryParams}`);
       }
 
       request.open('GET', url);
@@ -489,7 +501,11 @@ export default class GooglePlacesAutocomplete extends Component {
           // console.warn("google places autocomplete: request could not be completed or has been aborted");
         }
       };
-      request.open('GET', 'https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=' + encodeURIComponent(text) + '&' + Qs.stringify(this.props.query));
+
+      const query = Qs.stringify(this.props.query);
+      console.log(`_request (autocomplete): ${text}: ${query}`);
+      request.open('GET', `https://maps.googleapis.com/maps/api/place/autocomplete/json?&input=${encodeURIComponent(text)}&${query}`);
+
       if (this.props.query.origin !== null) {
          request.setRequestHeader('Referer', this.props.query.origin)
       }
