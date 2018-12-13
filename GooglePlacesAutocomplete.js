@@ -693,6 +693,8 @@ export default class GooglePlacesAutocomplete extends Component {
           {...this.props}
         />
       );
+    } else if (this.props.flatListAlternative) {
+      return this.props.flatListAlternative;
     }
 
     return null;
