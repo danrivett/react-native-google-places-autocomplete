@@ -90,7 +90,10 @@ export default class GooglePlacesAutocomplete extends Component {
     listViewDisplayed: this.props.listViewDisplayed === 'auto' ? false : this.props.listViewDisplayed,
   })
 
-  setAddressText = address => this.setState({ text: address })
+  setAddressText = address => {
+    this.setState({ text: address });
+    this._handleChangeText(address);
+  }
 
   getAddressText = () => this.state.text
 
